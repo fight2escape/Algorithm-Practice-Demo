@@ -6,7 +6,7 @@
 #define LEETCODE_DEMO_SELECTIONSORT_H
 
 template<typename T>
-void selectionSort(T arr[], int n) {
+void SelectionSort(T arr[], int n) {
     for (int i = 0; i < n; i++) {
         int minIndex = i;
         for (int j = i + 1; j < n; j++) {
@@ -22,7 +22,7 @@ void selectionSort(T arr[], int n) {
 
 //int n = 30000;
 //int *arr = SortTestHelper::generateRandomArray(n, 0, 4);
-//SortTestHelper::testSort("Selection Sort:", selectionSort, arr, n);
+//SortTestHelper::testSort("Selection Sort:", SelectionSort, arr, n);
 //selectionSort(arr, n);
 //SortTestHelper::printArray(arr, n);
 

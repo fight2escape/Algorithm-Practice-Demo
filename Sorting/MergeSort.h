@@ -5,6 +5,8 @@
 #ifndef LEETCODE_DEMO_MERGESORT_H
 #define LEETCODE_DEMO_MERGESORT_H
 
+#include "InsertionSort.h"
+
 template<typename T>
 void __merge(T arr[], int left, int mid, int right) {
     // [left, mid] 和 [mid+1, right]
@@ -35,8 +37,6 @@ void __merge(T arr[], int left, int mid, int right) {
         }
     }
 }
-
-
 
 template<typename T>
 void __mergeSort(T arr[], int left, int right) {

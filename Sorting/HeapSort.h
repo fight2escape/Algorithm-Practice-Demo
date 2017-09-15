@@ -6,7 +6,7 @@
 #define LEETCODE_DEMO_HEAPSORT_H
 
 #include "../heap/Heap.h"
-#include "../SortTestHelper.h"
+#include "SortTestHelper.h"
 #include "QuickSort3.h"
 
 template<typename T>

@@ -7,36 +7,37 @@
 
 #include <iostream>
 #include <ctime>
+#include "InsertionSort.h"
+
 using namespace std;
 
 template<typename T>
 void __quickSort3(T arr[], int left, int right) {
     // return
-    if(left >= right) {
-        return;
+    if(right - left <= 15) {
+        InsertionSort(arr, left, right);
+        return ;
     }
-
     // partition
     swap(arr[left], arr[rand() % (right - left + 1) + left]);
     T v = arr[left];
-    // [left+1, lt], [lt+1,gt-1], [gt,right]
-    int lt = left, gt = right, i = left+1;
-    while(i <= gt) {
+    // [left+1, lt], [lt+1, gt-1], [gt, right]
+    int lt = left, gt = right+1, i = left+1;
+    while(i < gt) {
         if(arr[i] < v) {
-            if(i > lt+1){
+            if(i > lt+1) {
                 swap(arr[lt+1], arr[i]);
             }
             lt++;
             i++;
         }else if(arr[i] > v) {
-            swap(arr[gt--], arr[i]);
+            swap(arr[--gt], arr[i]);
         }else{
             i++;
         }
     }
-    swap(arr[left], arr[lt]);
     // recursion
-    __quickSort3(arr, left, lt-1);
+    __quickSort3(arr, left, lt);
     __quickSort3(arr, gt, right);
 }
 
