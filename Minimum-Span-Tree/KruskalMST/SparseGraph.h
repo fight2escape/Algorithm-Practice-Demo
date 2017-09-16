@@ -66,7 +66,7 @@ public:
         for(int i=0; i<n; i++) {
             cout<<"vertex "<<i<<":";
             for(int j=0; j<g[i].size(); j++) {
-                cout<<"( to:"<<g[i][j]->w()<<",wt:"<<g[i][j]->wt()<<")\t";
+                cout<<"( to:"<<g[i][j]->w()<<",wt:"<<g[i][j]->wt()<<" )\t";
             }
             cout<<endl;
         }
@@ -108,3 +108,14 @@ public:
 };
 
 #endif //ALGORITHM_PRACTICE_DEMO_SPARSEGRAPH_H
+//string  filename = "testG1.txt";
+//int V = 8;
+//cout<<fixed<<setprecision(2);
+//
+//DenseGraph<double> g1(V, false);
+//ReadGraph<DenseGraph<double>,double> readGraph1(g1,filename);
+//g1.show();
+//
+//SparseGraph<double> g2(V, false);
+//ReadGraph<SparseGraph<double>,double> readGraph2(g2, filename);
+//g2.show();
