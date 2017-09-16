@@ -8,15 +8,17 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include "Edge.h"
 
 using namespace std;
 
 // 稠密图-邻接矩阵
+template<typename Weight>
 class DenseGraph {
 private:
     int n, m;
     bool directed;
-    vector<vector<bool>> g;
+    vector<vector<Edge<Weight> *>> g;
 
 public:
     DenseGraph(int n, bool directed) {
@@ -24,25 +26,35 @@ public:
         this->m = 0;
         this->directed = directed;
         for(int i=0; i<n; i++) {
-            g.push_back(vector<bool>(n, false));
+            g.push_back(vector<Edge<Weight> *>(n, NULL));
         }
     }
     ~DenseGraph() {
-
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<n; j++) {
+                if(g[i][j] != NULL) {
+                    delete g[i][j];
+                }
+            }
+        }
     }
 
     int V() { return n; }
     int E() { return m; }
 
-    void addEdge(int v, int w) {
+    void addEdge(int v, int w, Weight weight) {
         assert(v>=0 && v<n);
         assert(w>=0 && w<n);
         if(hasEdge(v, w)){
-            return;
+            delete g[v][w];
+            if(!directed) {
+                delete g[w][v];
+            }
+            m--;
         }
-        g[v][w] = true;
+        g[v][w] = new Edge<Weight>(v, w, weight);
         if(!directed) {
-            g[w][v] = true;
+            g[w][v] = new Edge<Weight>(w, v, weight);
         }
         m++;
     }
@@ -50,19 +62,18 @@ public:
     bool hasEdge(int v, int w) {
         assert(v>=0 && v<n);
         assert(w>=0 && w<n);
-        return g[v][w];
+        return g[v][w] != NULL ;
     }
 
     void show() {
         for(int i=0; i<V(); i++) {
-            cout<<i<<" :\t";
             for(int j=0; j<V(); j++) {
                 if(g[i][j]){
-                    cout<<j;
+                    cout<<g[i][j]->wt();
                 }else{
-                    cout<<g[i][j];
+                    cout<<"NULL";
                 }
-                cout<<"\t";
+                cout<<" \t";
             }
             cout<<endl;
         }
@@ -81,18 +92,18 @@ public:
             this->index = 0;
         }
 
-        int begin() {
+        Edge<Weight>* begin() {
             index = -1;
             return next();
         }
 
-        int next() {
+        Edge<Weight>* next() {
             for(index += 1; index < G.V(); index++){
                 if(G.g[v][index]) {
-                    return index;
+                    return G.g[v][index];
                 }
             }
-            return -1;
+            return NULL;
         }
 
         bool end() {
@@ -102,26 +113,3 @@ public:
 };
 
 #endif //ALGORITHM_PRACTICE_DEMO_DENSEGRAPH_H
-//    vector<int> vec({1,2,3,4,5,6});
-//    vector<int>::iterator iter;
-//    for(iter=vec.begin(); iter!=vec.end(); iter++) {
-//        cout<<*iter<<endl;
-//    }
-//    int N = 20;
-//    int M = 100;
-//    srand(time(NULL));
-//    DenseGraph g1(N, 0);
-//    for(int i=0; i<M; i++) {
-//        int a = rand() % N;
-//        int b = rand() % N;
-//        g1.addEdge(a, b);
-//    }
-//    g1.show();
-//    for(int v=0; v<N; v++) {
-//        cout<<v<<" : ";
-//        DenseGraph::adjIterator adj(g1, v);
-//        for(int w = adj.begin(); !adj.end(); w = adj.next()) {
-//            cout<<w<<" ";
-//        }
-//        cout<<endl;
-//    }
