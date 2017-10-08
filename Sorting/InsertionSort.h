@@ -7,14 +7,12 @@
 
 template<typename T>
 void InsertionSort(T arr[], int n) {
-    for (int i = 1; i < n; i++) {
-        int cur = arr[i];
-        for (int j = i - 1; j >= 0; j--) {
-            if (cur < arr[j]) {
-                arr[j + 1] = arr[j];
-            }
-            else {
-                arr[j + 1] = cur;
+    for(int i=1; i<n; i++){
+        T tmp = arr[i];
+        for(int j=i-1; j>=0; j--){
+            if(arr[j] > tmp){
+                swap(arr[j], arr[j+1]);
+            }else{
                 break;
             }
         }
@@ -22,17 +20,36 @@ void InsertionSort(T arr[], int n) {
 }
 
 template<typename T>
-void InsertionSort(T arr[], int left, int right) {
-    for(int i=left+1; i<=right; i++){
-        int cur = arr[i];
-        for(int j=i-1; j>=left; j--) {
-            if(cur < arr[j]){
+void InsertionSortPro(T arr[], int n) {
+    for(int i=1; i<n; i++){
+        T tmp = arr[i];
+        int pos = i;
+        for(int j=i-1; j>=0; j--){
+            if(arr[j] > tmp){
                 arr[j+1] = arr[j];
+                pos = j;
             }else{
-                arr[j+1] = cur;
                 break;
             }
         }
+        arr[pos] = tmp;
+    }
+}
+
+template<typename T>
+void InsertionSort(T arr[], int left, int right){
+    for(int i=left+1; i<=right; i++){
+        T tmp = arr[i];
+        int pos = i;
+        for(int j=i-1; j>=left; j--){
+            if(arr[j] > tmp){
+                arr[j+1] = arr[j];
+                pos = j;
+            }else{
+                break;
+            }
+        }
+        arr[pos] = tmp;
     }
 }
 
