@@ -16,48 +16,36 @@ void printArr(int arr[], int n){
     }
 }
 
+//------------------------------------------------//
+
 
 template<typename T>
-void insertionSort(T arr[], int n){
-    for(int i=1; i<n; i++){
-        T tmp = arr[i];
-        int pos = i;
-        for(int j=i-1; j>=0; j--){
-            if(arr[j] > tmp){
+void BubbleSort(T arr[], int n){
+    int newi;
+    for(int i=n-1; i>0; i = newi){
+        newi = -1;
+        for(int j=0; j<i; j++){
+            if(arr[j] > arr[j+1]){
+                int tmp = arr[j+1];
                 arr[j+1] = arr[j];
-                pos = j;
-            }else{
-                break;
+                arr[j] = tmp;
+                // 记录最后一次交换的位置设置为n的值
+                // 如果近乎有序，可以节省大量时间
+                newi = j+1;
             }
         }
-        arr[pos] = tmp;
+        if(!newi) break;
     }
 }
 
-template<typename T>
-void InsertionSort(T arr[], int left, int right){
-    for(int i=left+1; i<=right; i++){
-        T tmp = arr[i];
-        int pos = i;
-        for(int j=i-1; j>=left; j--){
-            if(arr[j] > tmp){
-                arr[j+1] = arr[j];
-                pos = j;
-            }else{
-                break;
-            }
-        }
-        arr[pos] = tmp;
-    }
-}
 
 int main() {
-    int n = 30;
+    int n = 15;
     int* arr = generateArr(n);
     printArr(arr, n);
 
-//    insertionSort(arr, n);
-    InsertionSort(arr, 0, 5);
+    BubbleSort(arr, n);
+
     printArr(arr, n);
     return 0;
 }

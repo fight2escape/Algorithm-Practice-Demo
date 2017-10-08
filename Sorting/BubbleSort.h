@@ -6,21 +6,21 @@
 #define LEETCODE_DEMO_BUBBLESORT_H
 
 template<typename T>
-void BubbleSort(T arr[], int n) {
-    for (int i = n-1; i > 0; i--) {
-        int newn = -1;
-        for (int j = 0; j < i; j++) {
-            if (arr[j] > arr[j + 1]) {
-                swap(arr[j], arr[j+1]);
-                newn = j + 1;
+void BubbleSort(T arr[], int n){
+    int newi;
+    for(int i=n-1; i>0; i = newi){
+        newi = -1;
+        for(int j=0; j<i; j++){
+            if(arr[j] > arr[j+1]){
+                int tmp = arr[j+1];
+                arr[j+1] = arr[j];
+                arr[j] = tmp;
+                // 记录最后一次交换的位置设置为n的值
+                // 如果近乎有序，可以节省大量时间
+                newi = j+1;
             }
         }
-        // 记录最后一次交换的位置设置为n的值
-        // 如果近乎有序，可以节省大量时间
-        if (newn < 0) {
-            break;
-        }
-        n = newn + 1;
+        if(!newi) break;
     }
 }
 
