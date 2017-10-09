@@ -1,6 +1,6 @@
 #include <iostream>
+#include <ctime>
 using namespace std;
-
 int* generateArr(int n){
     int* arr = new int[n];
     for(int i=0; i<n; i++){
@@ -8,94 +8,57 @@ int* generateArr(int n){
     }
     return arr;
 }
-
 void printArr(int arr[], int n){
     cout<<endl<<"------------------"<<endl;
     for(int i=0; i<n; i++){
         cout<<arr[i]<<" ";
     }
 }
-
 //------------------------------------------------//
 
-void InsertionSort(int arr[], int l, int r){
+
+int __partition(int arr[], int l, int r){
+    swap(arr[l], arr[ rand()%(r-l+1)+l ]);
+    int val = arr[l];
+    int k = l+1;
+    // [l+1, k-1], [k, r]
     for(int i=l+1; i<=r; i++){
-        int val = arr[i];
-        int pos = i;
-        for(int j=i-1; j>=l; j--){
-            if(arr[j] > val){
-                arr[j+1] = arr[j];
-                pos = j;
-            }else{
-                break;
+        if(arr[i] < val){
+            if(i != k){
+                swap(arr[i], arr[k]);
             }
-        }
-        arr[pos] = val;
-    }
-}
-
-void merge(int arr[], int l, int mid, int r){
-    int i = l, j= mid+1;
-    int n = r-l+1;
-    int *tmp = new int[n];
-    int ti = 0;
-    while(i<=mid && j<=r){
-        if(arr[i] <= arr[j]){
-            tmp[ti++] = arr[i++];
-        }else{
-            tmp[ti++] = arr[j++];
+            k++;
         }
     }
-    while(i<=mid){
-        tmp[ti++] = arr[i++];
-    }
-    while(j<=r){
-        tmp[ti++] = arr[j++];
-    }
-    for(int i=l; i<=r; i++){
-        arr[i] = tmp[i-l];
-    }
+    swap(arr[l], arr[k-1]);
+    return k-1;
 }
 
-void __mergeSort(int arr[], int l, int r){
-    if(r-l <= 10){
-        InsertionSort(arr, l ,r);
+void __sort(int arr[], int l, int r){
+    if(l >= r){
         return;
     }
-    int mid = l + (r-l)/2;
-    __mergeSort(arr, l, mid);
-    __mergeSort(arr, mid+1, r);
-    if(arr[mid] > arr[mid+1]){
-        merge(arr, l, mid, r);
-    }
+    int mid = __partition(arr, l, r);
+    __sort(arr, l, mid-1);
+    __sort(arr, mid+1, r);
 }
 
-void MergeSort(int arr[], int n){
-    __mergeSort(arr, 0, n-1);
+void sort(int arr[], int n){
+    srand(time(NULL));
+    __sort(arr, 0, n-1);
 }
-
-
-// 迭代实现
-void MergeSort2(int arr[], int n){
-    for(int i=1; i<n; i++){
-        for(int j=0; j+i<n; j++){
-            merge(arr, j, j+i-1, min(j+i+i, n-1));
-        }
-    }
-}
-
 
 int main() {
     int n = 15;
     int* arr = generateArr(n);
     printArr(arr, n);
 
-//    MergeSort(arr, n);
-    MergeSort2(arr, n);
+
+    sort(arr, n);
+
+
 
     printArr(arr, n);
-
-
     return 0;
 }
 
