@@ -18,23 +18,69 @@ void printArr(int arr[], int n){
 
 //------------------------------------------------//
 
-
-template<typename T>
-void BubbleSort(T arr[], int n){
-    int newi;
-    for(int i=n-1; i>0; i = newi){
-        newi = -1;
-        for(int j=0; j<i; j++){
-            if(arr[j] > arr[j+1]){
-                int tmp = arr[j+1];
+void InsertionSort(int arr[], int l, int r){
+    for(int i=l+1; i<=r; i++){
+        int val = arr[i];
+        int pos = i;
+        for(int j=i-1; j>=l; j--){
+            if(arr[j] > val){
                 arr[j+1] = arr[j];
-                arr[j] = tmp;
-                // 记录最后一次交换的位置设置为n的值
-                // 如果近乎有序，可以节省大量时间
-                newi = j+1;
+                pos = j;
+            }else{
+                break;
             }
         }
-        if(!newi) break;
+        arr[pos] = val;
+    }
+}
+
+void merge(int arr[], int l, int mid, int r){
+    int i = l, j= mid+1;
+    int n = r-l+1;
+    int *tmp = new int[n];
+    int ti = 0;
+    while(i<=mid && j<=r){
+        if(arr[i] <= arr[j]){
+            tmp[ti++] = arr[i++];
+        }else{
+            tmp[ti++] = arr[j++];
+        }
+    }
+    while(i<=mid){
+        tmp[ti++] = arr[i++];
+    }
+    while(j<=r){
+        tmp[ti++] = arr[j++];
+    }
+    for(int i=l; i<=r; i++){
+        arr[i] = tmp[i-l];
+    }
+}
+
+void __mergeSort(int arr[], int l, int r){
+    if(r-l <= 10){
+        InsertionSort(arr, l ,r);
+        return;
+    }
+    int mid = l + (r-l)/2;
+    __mergeSort(arr, l, mid);
+    __mergeSort(arr, mid+1, r);
+    if(arr[mid] > arr[mid+1]){
+        merge(arr, l, mid, r);
+    }
+}
+
+void MergeSort(int arr[], int n){
+    __mergeSort(arr, 0, n-1);
+}
+
+
+// 迭代实现
+void MergeSort2(int arr[], int n){
+    for(int i=1; i<n; i++){
+        for(int j=0; j+i<n; j++){
+            merge(arr, j, j+i-1, min(j+i+i, n-1));
+        }
     }
 }
 
@@ -44,9 +90,12 @@ int main() {
     int* arr = generateArr(n);
     printArr(arr, n);
 
-    BubbleSort(arr, n);
+//    MergeSort(arr, n);
+    MergeSort2(arr, n);
 
     printArr(arr, n);
+
+
     return 0;
 }
 
