@@ -20,18 +20,18 @@ void printArr(int arr[], int n){
 int __partition(int arr[], int l, int r){
     swap(arr[l], arr[ rand()%(r-l+1)+l ]);
     int val = arr[l];
-    int k = l+1;
-    // [l+1, k-1], [k, r]
-    for(int i=l+1; i<=r; i++){
-        if(arr[i] < val){
-            if(i != k){
-                swap(arr[i], arr[k]);
-            }
-            k++;
-        }
+    int i=l+1, j=r+1;
+    // [l+1, j-1], [j, r]
+    while(true){
+        while(i<j && arr[i]<=val) i++;
+        while(i<j && arr[j-1]>=val) j--;
+        if(i>=j) break;
+        swap(arr[i], arr[j-1]);
+        i++;
+        j--;
     }
-    swap(arr[l], arr[k-1]);
-    return k-1;
+    swap(arr[l], arr[j-1]);
+    return j-1;
 }
 
 void __sort(int arr[], int l, int r){
