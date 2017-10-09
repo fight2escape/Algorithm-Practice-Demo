@@ -36,8 +36,9 @@ void __quickSort3(T arr[], int left, int right) {
             i++;
         }
     }
+    swap(arr[left], arr[lt]);
     // recursion
-    __quickSort3(arr, left, lt);
+    __quickSort3(arr, left, lt-1);
     __quickSort3(arr, gt, right);
 }
 

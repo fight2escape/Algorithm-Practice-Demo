@@ -14,33 +14,40 @@ void printArr(int arr[], int n){
         cout<<arr[i]<<" ";
     }
 }
-//------------------------------------------------//
-
-
-int __partition(int arr[], int l, int r){
-    swap(arr[l], arr[ rand()%(r-l+1)+l ]);
-    int val = arr[l];
-    int i=l+1, j=r+1;
-    // [l+1, j-1], [j, r]
-    while(true){
-        while(i<j && arr[i]<=val) i++;
-        while(i<j && arr[j-1]>=val) j--;
-        if(i>=j) break;
-        swap(arr[i], arr[j-1]);
-        i++;
-        j--;
+bool isSorted(int arr[], int n){
+    while(--n){
+        if(arr[n] < arr[n-1]){
+            return false;
+        }
     }
-    swap(arr[l], arr[j-1]);
-    return j-1;
+    return true;
 }
+//------------------------------------------------
 
 void __sort(int arr[], int l, int r){
     if(l >= r){
         return;
     }
-    int mid = __partition(arr, l, r);
-    __sort(arr, l, mid-1);
-    __sort(arr, mid+1, r);
+    // partition
+    swap(arr[l], arr[ rand()%(r-l+1)+l ]);
+    int val = arr[l];
+    int lt = l, gt = r+1;
+    int i=l+1;
+    while(i < gt){
+        if(arr[i] > val){
+            swap(arr[--gt], arr[i]);
+        }else if(arr[i] < val){
+            swap(arr[++lt], arr[i]);
+            i++;
+        }else{
+            i++;
+        }
+    }
+    // [l, lt-1], [lt, gt-1], [gt, r]
+    swap(arr[l], arr[lt]);
+    // recursive
+    __sort(arr, l ,lt-1);
+    __sort(arr, gt, r);
 }
 
 void sort(int arr[], int n){
@@ -49,16 +56,20 @@ void sort(int arr[], int n){
 }
 
 int main() {
-    int n = 15;
+    int n = 15000;
+    bool print = 0;
     int* arr = generateArr(n);
-    printArr(arr, n);
+    if(print) printArr(arr, n);
+    time_t start = clock();
 
 
     sort(arr, n);
 
 
-
-    printArr(arr, n);
+    time_t end = clock();
+    if(print) printArr(arr, n);
+    if(!isSorted(arr, n)) cout<<endl<<endl<<"not sorted!!!"<<endl;
+    cout<<endl<<"Spending: "<< double(end-start)/double(CLOCKS_PER_SEC) <<" s"<<endl;
     return 0;
 }
 
