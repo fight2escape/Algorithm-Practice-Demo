@@ -24,33 +24,68 @@ bool isSorted(int arr[], int n){
 }
 //------------------------------------------------
 
-
-void Bubble(int arr[], int n){
-    for(int i=n-1; i>0; i--){
-        int pos = -1;
-        for(int j=0; j<i; j++){
-            if(arr[j] > arr[j+1]){
-                int tmp = arr[j+1];
+template<typename T>
+void InsertionSort(T arr[], int l, int r){
+    for(int i=l+1; i<=r; i++){
+        T val = arr[i];
+        int pos = i;
+        for(int j=i-1; j>=l ;j--){
+            if(arr[j] > val){
                 arr[j+1] = arr[j];
-                arr[j] = tmp;
-
-                pos = j+1;
+                pos = j;
+            }else{
+                break;
             }
         }
-        if(pos==-1) break;
-        i = pos;
+        arr[pos] = val;
     }
 }
 
+
+template<typename T>
+void __sort(T arr[], int l, int r){
+    if(r-l <= 15){
+        InsertionSort(arr, l, r);
+        return;
+    }
+
+    swap(arr[l], arr[ rand()%(r-l+1)+l ]);
+    T val = arr[l];
+    int lt=l, gt=r+1, i=l+1;
+    while(i<gt){
+        if(arr[i] < val){
+            swap(arr[i++], arr[++lt]);
+        }else if(arr[i] > val){
+            swap(arr[i], arr[--gt]);
+        }else{
+            i++;
+        }
+    }
+    swap(arr[l], arr[lt]);
+
+    __sort(arr, l, lt-1);
+    __sort(arr, gt, r);
+    return;
+}
+
+template<typename T>
+void sort(T arr[], int n){
+    srand(time(NULL));
+    __sort(arr, 0, n-1);
+}
+
 int main() {
-    int n = 150000;
+    int n = 1500000;
     bool print = 0;
     int* arr = generateArr(n);
     if(print) printArr(arr, n);
     time_t start = clock();
 
 
-    Bubble(arr, n);
+    sort(arr, n);
+
+
+
 
     time_t end = clock();
     if(print) printArr(arr, n);
