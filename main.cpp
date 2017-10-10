@@ -29,7 +29,7 @@ void InsertionSort(T arr[], int l, int r){
     for(int i=l+1; i<=r; i++){
         T val = arr[i];
         int pos = i;
-        for(int j=i-1; j>=l ;j--){
+        for(int j=i-1; j>=l; j--){
             if(arr[j] > val){
                 arr[j+1] = arr[j];
                 pos = j;
@@ -39,50 +39,77 @@ void InsertionSort(T arr[], int l, int r){
         }
         arr[pos] = val;
     }
+    return;
 }
 
 
 template<typename T>
-void __sort(T arr[], int l, int r){
+void __merge(T arr[], int l, int mid, int r){
+    int i=l, j=mid+1;
+    int n = r-l+1;
+    T tmp[n];
+    int k = 0;
+
+    while(i<=mid && j<=r){
+        if(arr[i] <= arr[j]){
+            tmp[k] = arr[i++];
+        }else{
+            tmp[k] = arr[j++];
+        }
+        k++;
+    }
+    while(i<=mid){
+        tmp[k++] = arr[i++];
+    }
+    while(j<=r){
+        tmp[k++] = arr[j++];
+    }
+    for(int i=0; i<k; i++){
+        arr[i+l] = tmp[i];
+    }
+    return;
+}
+
+template<typename T>
+void __mergeSort(T arr[], int l, int r){
     if(r-l <= 15){
         InsertionSort(arr, l, r);
         return;
     }
 
-    swap(arr[l], arr[ rand()%(r-l+1)+l ]);
-    T val = arr[l];
-    int lt=l, gt=r+1, i=l+1;
-    while(i<gt){
-        if(arr[i] < val){
-            swap(arr[i++], arr[++lt]);
-        }else if(arr[i] > val){
-            swap(arr[i], arr[--gt]);
-        }else{
-            i++;
-        }
-    }
-    swap(arr[l], arr[lt]);
 
-    __sort(arr, l, lt-1);
-    __sort(arr, gt, r);
+    int mid = l + (r-l)/2;
+    __mergeSort(arr, l, mid);
+    __mergeSort(arr, mid+1,r);
+    if(arr[mid] > arr[mid+1]){
+        __merge(arr, l, mid, r);
+    }
     return;
 }
 
 template<typename T>
-void sort(T arr[], int n){
-    srand(time(NULL));
-    __sort(arr, 0, n-1);
+void MergeSort(T arr[], int n){
+    __mergeSort(arr, 0, n-1);
+}
+
+template<typename T>
+void MergeSortPro(T arr[], int n){
+    for(int i=1; i<n; i+=i){
+        for(int j=0; j+i<n; j+= i+i){
+            __merge(arr, j, j+i-1, min(n-1, j+i+i-1));
+        }
+    }
 }
 
 int main() {
-    int n = 1500000;
+    int n = 500000;
     bool print = 0;
     int* arr = generateArr(n);
     if(print) printArr(arr, n);
     time_t start = clock();
 
 
-    sort(arr, n);
+    MergeSort(arr, n);
 
 
 
