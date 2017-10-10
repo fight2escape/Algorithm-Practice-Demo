@@ -24,47 +24,33 @@ bool isSorted(int arr[], int n){
 }
 //------------------------------------------------
 
-void __sort(int arr[], int l, int r){
-    if(l >= r){
-        return;
-    }
-    // partition
-    swap(arr[l], arr[ rand()%(r-l+1)+l ]);
-    int val = arr[l];
-    int lt = l, gt = r+1;
-    int i=l+1;
-    while(i < gt){
-        if(arr[i] > val){
-            swap(arr[--gt], arr[i]);
-        }else if(arr[i] < val){
-            swap(arr[++lt], arr[i]);
-            i++;
-        }else{
-            i++;
-        }
-    }
-    // [l, lt-1], [lt, gt-1], [gt, r]
-    swap(arr[l], arr[lt]);
-    // recursive
-    __sort(arr, l ,lt-1);
-    __sort(arr, gt, r);
-}
 
-void sort(int arr[], int n){
-    srand(time(NULL));
-    __sort(arr, 0, n-1);
+void Bubble(int arr[], int n){
+    for(int i=n-1; i>0; i--){
+        int pos = -1;
+        for(int j=0; j<i; j++){
+            if(arr[j] > arr[j+1]){
+                int tmp = arr[j+1];
+                arr[j+1] = arr[j];
+                arr[j] = tmp;
+
+                pos = j+1;
+            }
+        }
+        if(pos==-1) break;
+        i = pos;
+    }
 }
 
 int main() {
-    int n = 15000;
+    int n = 150000;
     bool print = 0;
     int* arr = generateArr(n);
     if(print) printArr(arr, n);
     time_t start = clock();
 
 
-    sort(arr, n);
-
+    Bubble(arr, n);
 
     time_t end = clock();
     if(print) printArr(arr, n);
